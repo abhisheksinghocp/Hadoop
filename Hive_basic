@@ -1,0 +1,570 @@
+/home/notroot/lab/hdfs/datan1/current – all store file location
+/home/notroot/lab/hdfs/namenodep/current/fsimage – each time hadoop is read this file .
+
+hive> desc external_sales_with_format_partition;
+OK
+transaction_date string
+product string
+price int
+payment_type string
+name string	
+city string
+state string
+country string
+account_created string
+last_login string
+latitude double
+longitude double
+product_p string
+payment_type_t string
+create table sales_2009 (Transaction_date string,Product string,Price int,Payment_Type string,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double);
+OK
+Time taken: 4.667 seconds
+Hive (retail)> describe formatted sales_2009;
+OK
+# col_name data_type comment
+transaction_date string None
+product string None
+price int None
+payment_type string None
+name string None
+city string None
+state string None
+country string None
+account_created string None
+last_login string None
+latitude double None
+longitude double None
+# Detailed Table Information
+Database: retail
+Owner: notroot
+CreateTime: Sat Jun 06 06:12:59 UTC 2015
+LastAccessTime: UNKNOWN
+Protect Mode: None
+Retention: 0
+Location: hdfs://localhost:8020/user/hive/warehouse/retail.db/sales_2009
+Table Type: MANAGED_TABLE
+Table Parameters:
+transient_lastDdlTime 1433571179
+# Storage Information
+SerDe Library: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+InputFormat: org.apache.hadoop.mapred.TextInputFormat
+OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+Compressed: No
+Num Buckets: -1
+Bucket Columns: []
+Sort Columns: []
+Storage Desc Params:
+serialization.format 1
+Time taken: 3.739 seconds
+create external table external_sales_2009 (Transaction_date string,Product string,Price int,Payment_Type string,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double);
+OK
+Time taken: 2.054 seconds
+Hive (retail)> describe formatted external_sales_2009;
+OK
+# col_name data_type comment
+transaction_date string None
+product string None
+price int None
+payment_type string None
+name string None
+city string None
+state string None
+country string None
+account_created string None
+last_login string None
+latitude double None
+longitude double None
+# Detailed Table Information
+Database: retail
+Owner: notroot
+CreateTime: Sat Jun 06 07:43:18 UTC 2015
+LastAccessTime: UNKNOWN
+Protect Mode: None
+Retention: 0
+Location: hdfs://localhost:8020/user/hive/warehouse/retail.db/external_sales_2009
+Table Type: EXTERNAL_TABLE
+Table Parameters:
+EXTERNAL TRUE
+transient_lastDdlTime 1433576598
+# Storage Information
+SerDe Library: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+InputFormat: org.apache.hadoop.mapred.TextInputFormat
+OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+Compressed: No
+Num Buckets: -1
+Bucket Columns: []
+Sort Columns: []
+Storage Desc Params:
+serialization.format 1
+Time taken: 0.33 seconds
+
+notroot@ubuntu:~$ hadoop fs -ls /user/hive/warehouse/retail.db
+Warning: $HADOOP_HOME is deprecated.
+drwxr-xr-x - notroot supergroup 0 2015-06-06 07:43 /user/hive/warehouse/retail.db/external_sales_2009
+drwxr-xr-x - notroot supergroup 0 2015-06-06 06:12 /user/hive/warehouse/retail.db/sales_2009
+hive (retail)> create external table external_sales_2009_with_format (Transaction_date string,Product string,Price int,Payment_Type string,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double) row format delimited fields terminated by ','
+;
+OK
+Time taken: 1.715 seconds
+hive (retail)> describe formatted external_sales_2009_with_format; OK
+# col_name data_type comment
+transaction_date string None
+product string None
+price int None
+payment_type string None
+name string None
+city string None
+state string None
+country string None
+account_created string None
+last_login string None
+latitude double None
+longitude double None
+# Detailed Table Information
+Database: retail
+Owner: notroot
+CreateTime: Sat Jun 06 08:21:26 UTC 2015
+LastAccessTime: UNKNOWN
+Protect Mode: None
+Retention: 0
+Location: hdfs://localhost:8020/user/hive/warehouse/retail.db/external_sales_2009_with_format
+Table Type: EXTERNAL_TABLE
+Table Parameters:
+EXTERNAL TRUE
+transient_lastDdlTime 1433578886
+# Storage Information
+SerDe Library: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+InputFormat: org.apache.hadoop.mapred.TextInputFormat
+OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+Compressed: No
+Num Buckets: -1
+Bucket Columns: []
+Sort Columns: []
+Storage Desc Params:
+field.delim , ****here we can see the fields terminated by 
+serialization.format ,
+Time taken: 0.698 seconds
+hive> create table external_sales_2009_with_format_partition (Transaction_date string,Product string,Price int,Payment_Type string,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double) 
+partitioned by (Product string,Payment_Type string) 
+row format delimited fields terminated by ',';
+FAILED: Error in semantic analysis: Column repeated in partitioning columns
+hive> create external table external_sales_2009_with_format_partition (Transaction_date string,Product string,Price int,Payment_Type string,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double) 
+partitioned by (Product string,Payment_Type string) 
+row format delimited fields terminated by ',';
+FAILED: Error in semantic analysis: Column repeated in partitioning columns
+create external table external_sales_2009_with_format_partition (Transaction_date string,Price int,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double) partitioned by (Product string,Payment_Type string) row format delimited fields terminated by ',';
+OK
+Time taken: 1.818 seconds
+partitioned by (Product string,Payment_Type string) create table should not use same name for create column
+
+hive> desc formatted external_sales_2009_with_format_partition;
+OK
+# col_name data_type comment
+transaction_date string None
+price int None
+name string None
+city string None
+state string None
+country string None
+account_created string None
+last_login string None
+latitude double None
+longitude double None
+# Partition Information
+# col_name data_type comment
+product string None
+payment_type string None
+# Detailed Table Information
+Database: retail
+Owner: notroot
+CreateTime: Sat Jun 06 11:32:00 UTC 2015
+LastAccessTime: UNKNOWN
+Protect Mode: None
+Retention: 0
+Location: hdfs://localhost:8020/user/hive/warehouse/retail.db/external_sales_2009_with_format_partition
+Table Type: EXTERNAL_TABLE
+Table Parameters:
+EXTERNAL TRUE
+transient_lastDdlTime 1433590320
+# Storage Information
+SerDe Library: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+InputFormat: org.apache.hadoop.mapred.TextInputFormat
+OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+Compressed: No
+Num Buckets: -1
+Bucket Columns: []
+Sort Columns: []
+Storage Desc Params:
+field.delim ,
+serialization.format ,
+Time taken: 0.609 seconds
+Edit the sql
+hive> create external table external_sales_2009_with_format_partition (Transaction_date string,Product string,Price int,Payment_Type string,Name string,City string,State string,Country string,Account_Created string,Last_Login string,Latitude double,Longitude double) 
+partitioned by (Product_p string,Payment_Type_t string) 
+row format delimited fields terminated by ',';
+OK
+Time taken: 0.177 seconds
+hive> desc formatted external_sales_2009_with_format_partition; OK # col_name data_type comment
+transaction_date string None
+product string None
+price int None
+payment_type string None
+name string None
+city string None
+state string None
+country string None
+account_created string None
+last_login string None
+latitude double None
+longitude double None
+# Partition Information
+# col_name data_type comment
+product_p string None
+payment_type_t string None
+# Detailed Table Information
+Database: retail
+Owner: notroot
+CreateTime: Sat Jun 06 11:44:38 UTC 2015
+LastAccessTime: UNKNOWN
+Protect Mode: None
+Retention: 0
+Location: hdfs://localhost:8020/user/hive/warehouse/retail.db/external_sales_2009_with_format_partition
+Table Type: EXTERNAL_TABLE
+Table Parameters:
+EXTERNAL TRUE
+transient_lastDdlTime 1433591078
+# Storage Information
+SerDe Library: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+InputFormat: org.apache.hadoop.mapred.TextInputFormat
+OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+Compressed: No
+Num Buckets: -1
+Bucket Columns: []
+Sort Columns: []
+Storage Desc Params:
+field.delim ,
+serialization.format ,
+Time taken: 0.264 seconds
+hive> load data local inpath '/home/notroot/SalesJan2009.txt' into table external_sales_2009_with_format_partition;
+FAILED: Error in semantic analysis: Need to specify partition columns because the destination table is partitioned
+load data local inpath '/home/notroot/SalesJan2009.txt' into table external_sales_2009_with_format_partition partition (product_p = 'Product1', payment_type_t ='Visa');
+location
+-rw-r--r-- 1 notroot supergroup 123638 2015-06-06 12:43 /user/hive/warehouse/retail.db/external_sales_2009_with_format_partition/product_p=Product1/payment_type_t=Visa/SalesJan2009.txt
+hive> insert into table external_sales_2009_with_format select * from external_sales_2009_with_format_partition;
+FAILED: Error in semantic analysis: Line 1:18 cannot insert into target table because column number/types are different 'external_sales_2009_with_format': Table insclause-0 has 12 columns, but query has 14 columns.
+external_sales_2009_with_format have 12 column 
+external_sales_2009_with_format_partition have 12 column and 2 partition column;
+you can select partition column in select query
+hive> select transaction_date,product,payment_type,product_p,payment_type_t from external_sales_2009_with_format_partition;
+hive> insert into table external_sales_with_format_partition partition(Product_p,Payment_Type_t) select * from external_sales_2009_with_format_partition; FAILED: Error in semantic analysis: Dynamic partition strict mode requires at least one static partition column. To turn this off set hive.exec.dynamic.partition.mode=nonstrict
+Note: - we cannot copy data direct into partition to partition table;
+hive> insert into table external_sales_with_format_partition partition(Product_p,Payment_Type_t) select transaction_date,product,price,payment_type,name,city,state,country from external_sales_2009_with_format_partition;
+FAILED: Error in semantic analysis: Dynamic partition strict mode requires at least one static partition column. To turn this off set hive.exec.dynamic.partition.mode=nonstrict
+hive> set hive.exec.dynamic.partition.mode=nonstrict;
+note :- if you not use above command you will get below error 
+FAILED: Error in semantic analysis: Dynamic partition strict mode requires at least one static partition column. To turn this off set hive.exec.dynamic.partition.mode=nonstrict
+
+hive> insert into table external_sales_with_format_partition partition(Product_p,Payment_Type_t) select transaction_date,product,price,payment_type,name,city,state,country from external_sales_2009_with_format_partition;
+FAILED: Error in semantic analysis: Line 1:18 Cannot insert into target table because column number/types are different 'Payment_Type_t': Table insclause-0 has 14 columns, but query has 8 columns.
+insert into table external_sales_with_format_partition partition(Product_p,Payment_Type_t) select transaction_date,product,price,payment_type,name,city,state,country,account_created,last_login,latitude,longitude,product_p,payment_type_t from external_sales_2009_with_format_partition;
+OK
+Time taken: 39.53 seconds
+If you do wrong calculation then you will get null 
+Like you want multiply number with date then output will be NULL
+Perfomaces improvement :-
+hive> select count(*) , avg(price),sum(price) from external_sales_2009_with_format_partition;
+MapReduce Total cumulative CPU time: 10 seconds 890 msec
+Ended Job = job_201506061435_0012
+MapReduce Jobs Launched:
+Job 0: Map: 1 Reduce: 1 Cumulative CPU: 10.89 sec HDFS Read: 247747 HDFS Write: 32 SUCCESS
+Total MapReduce CPU Time Spent: 10 seconds 890 msec
+hive> SET hive.map.aggr=true;
+MapReduce Total cumulative CPU time: 6 seconds 570 msec
+Ended Job = job_201506061435_0013
+MapReduce Jobs Launched:
+Job 0: Map: 1 Reduce: 1 Cumulative CPU: 6.57 sec HDFS Read: 247747 HDFS Write: 32 SUCCESS
+Total MapReduce CPU Time Spent: 6 seconds 570 msec
+hive> SET hive.map.aggr=false; once done make it false
+This setting will attempt to do “top-level” aggregation in the map phase, as in this
+example. (An aggregation that isn’t top-level would be aggregation after performing a
+GROUP BY.) However, this setting will require more memory.
+
+hive> select distinct(upper(Payment_Type)),upper (Payment_Type) from external_sales_2009_with_format_partition limit 10;
+FAILED: Error in semantic analysis: Line 1:37 Repeated key in GROUP BY 'Payment_Type'
+hive> select distinct(upper(Payment_Type)),lower(Payment_Type) from external_sales_2009_with_format_partition limit 10;
+000" 000"
+AMEX amex
+DINERS diners
+MASTERCARD mastercard
+PAYMENT_TYPE payment_type
+VISA visa
+hive> select Payment_Type,sum(price) from external_sales_2009_with_format_partition group by Payment_Type;
+000" NULL
+Amex 377800
+Diners 267600
+Mastercard 916900
+Payment_Type NULL
+Visa 1672700
+hive> select distinct(upper(Payment_Type)),round(price) from external_sales_2009_with_format_partition limit 10;
+Note :- will calculate the distinct based on combination of Payment_type + PRICE
+000" NULL
+AMEX 800
+AMEX 1200
+AMEX 1800
+AMEX 3600
+AMEX 7500
+DINERS 1200
+DINERS 3600
+DINERS 7500
+MASTERCARD 1200
+Select explode (price) from external_sales_with_format_partition;
+FAILED: Error in semantic analysis: 1:7 UDTF's require an AS clause. Error encountered near token 'price'
+hive> select explode(price) as price from external_sales_with_format_partition;
+FAILED: Error in semantic analysis: explode() takes an array or a map as a parameter
+Note :- Price is just a column with string data type
+hive> select explode('price','abhishek') as price from external_sales_with_format_partition;
+FAILED: Error in semantic analysis: explode() takes only one argument
+hive> select stack(2,product,price) as product from external_sales_with_format_partition limit 10;
+FAILED: Error in semantic analysis: Argument 1's type (string) should be equal to argument 2's type (int)
+
+hive> select stack(2,product,name,city) as product from external_sales_with_format_partition limit 10;
+FAILED: Error in semantic analysis: The number of aliases supplied in the AS clause does not match the number of columns output by the UDTF expected 2 aliases but got 1
+hive> select stack(3,product,name,city) as product from external_sales_with_format_partition limit 10;
+Product – column name
+Name – column name
+City – column name
+Product1 - value
+carolina - value
+Basildon - value
+Product1 - value
+Betina - value
+Parkville - value
+Product1 – value
+hive> select stack(2,product,name) as product from external_sales_with_format_partition limit 10;
+Product – column name
+Name – column name
+Product1 – column name
+Carolina – value
+Product1 – value
+Betina – value
+Product1 – value
+Federica e Andrea – value
+Product1 – value
+Gouya – value
+Note :- stack(3(equal to no of column in stack) ,product,name,city)
+hive> SELECT parse_url_tuple('https://www.facebook.com/ankit.agarwal1188…', 'HOST', 'PATH', 'QUERY','REF','PROTOCOL','AUTHORITY','FILE','USERINFO') as (HOST, PATH, QUERY, REF,PROTOCOL, AUTHORITY, FILE, USERINFO) FROM external_sales_with_format_partition limit 2;
+HOST, PATH, QUERY, REF, PROTOCOL, AUTHORITY
+www.facebook.com /ankit.agarwal1188 fref=nf&pnref=story NULL https www.facebook.com 
+FILE, USERINFO
+/ankit.agarwal1188?fref=nf&pnref=story NULL
+hive> SELECT parse_url_tuple('http://hortonworks.com/…/how-to-configure-hive-server-2-fo…/', 'HOST', 'PATH', 'QUERY','REF','PROTOCOL','AUTHORITY','FILE','USERINFO') as (HOST, PATH, QUERY, REF,PROTOCOL, AUTHORITY, FILE, USERINFO) FROM external_sales_with_format_partition limit 1;
+hortonworks.com /community/forums/topic/how-to-configure-hive-server-2-for-odbc-connection-in-hdp-1-3-on-windows/ NULL NULL http hortonworks.com /community/forums/topic/how-to-configure-hive-server-2-for-odbc-connection-in-hdp-1-3-on-windows/ NULL
+hive> select length(name),name from external_sales_with_format_partition limit 2;
+4 Name (header) 
+8 carolina
+Time taken: 30.652 seconds
+hive> select reverse(name) ,name from external_sales_with_format_partition limit 2;
+emaN Name
+anilorac carolina
+Time taken: 35.144 seconds
+hive> select concat(name,price) ,name from external_sales_with_format_partition limit 2;
+NULL Name
+carolina1200 carolina
+Time taken: 36.077 seconds
+hive> select concat_ws('$$',name,price) ,name from external_sales_with_format_partition limit 2;
+FAILED: Error in semantic analysis: Line 1:27 Argument type mismatch 'price': Argument 3 of function CONCAT_WS must be "string or array<string>", but "int" was found.
+hive> select concat_ws('$$',name,transaction_date) ,name from external_sales_with_format_partition limit 2;
+Name$$Transaction_date Name
+carolina$$1/2/09 6:17 carolina
+hive> select substr(transaction_date,3) ,name from external_sales_with_format_partition limit 2;
+date values :- 1/2/09 6:17 
+ansaction_date Name
+2/09 6:17 carolina
+hive> select substr(transaction_date,1,6) ,name from external_sales_with_format_partition limit 2;
+Transa Name
+1/2/09 carolina
+hive> select substr(transaction_date,1,length(transaction_date)) ,name from external_sales_with_format_partition limit 2;
+Transaction_date Name
+1/2/09 6:17 carolina
+hive> select substr(transaction_date,1,length(transaction_date)-1) ,name from external_sales_with_format_partition limit 2;
+Transaction_dat Name
+1/2/09 6:1 carolina
+hive> select substr(transaction_date,-1,1) ,name from external_sales_with_format_partition limit 2;
+e Name
+7 carolina (last values of date string)
+hive> select substr(transaction_date,-2,1) ,name from external_sales_with_format_partition limit 2;
+t Name
+1 (2nd digit from last ) carolina
+hive> select substr(transaction_date,-2,2) ,name from external_sales_with_format_partition limit 2;
+te Name
+17 (last 2 digit) carolina
+hive> select trim(' abhi ') from external_sales_with_format_partition limit 2;
+abhi
+abhi
+ltrim Return the string resulting from trimming spaces fromthe beginning (lefthand side) of s, e.g., ltrim(' hive') results in 'hive '.
+Rtrim Return the string resulting from trimming spaces from the end (righthand side) of s, e.g., rtrim(' hive') results in ' hive'.
+hive> select regexp_replace('abhishek','[sek]','*') from external_sales_with_format_partition limit 2;
+OK
+abhi*h**
+abhi*h**
+hive> select regexp_replace('abhishek','shek','*') from external_sales_with_format_partition limit 2;
+OK
+abhi*
+abhi*
+hive> select cast('abhishek1singh' as string) from external_sales_with_format_partition limit 2;
+OK
+abhishek1singh
+abhishek1singh
+hive> select cast('abhishek' as int) from external_sales_with_format_partition limit 2;
+OK
+NULL if convetion failed the you will get null values
+NULL
+hive> select to_date("1970-01-01 00:00:00:00") from external_sales_with_format_partition limit 1;
+OK
+1970-01-01
+hive> select to_date("1970-24-01 00:00:00:00") from external_sales_with_format_partition limit 1;
+OK
+1971-12-01 – error record
+hive> select to_date("1970-12-30 00:00:00:00") from external_sales_with_format_partition limit 1;
+OK
+1970-12-30
+hive> select to_date("1970-12-32") from external_sales_with_format_partition limit 1;
+1971-01-01 
+As 31 is last of 1970 and 32 mean first day of next year that means 1971-01-01
+hive> select to_date("1970-12-32"-1) from external_sales_with_format_partition limit 1;
+NULL
+hive> select to_date("1970/12/30") from external_sales_with_format_partition limit 1;
+NULL
+hive> select to_date("30-12-1988") from external_sales_with_format_partition limit 1;
+0036-05-10
+hive> select year("1970-12-32"),year("1970-12-31") from external_sales_with_format_partition limit 1;
+1971 1970
+hive> select month("1970-12-32"),month("1970-12-31") from external_sales_with_format_partition limit 1;
+1	12
+hive> select day("1970-12-32"),day("1970-12-31") from external_sales_with_format_partition limit 1;
+1	31
+hive> select unix_timestamp('2009-03-20', 'yyyy-MM-dd') from external_sales_with_format_partition limit 1;
+1237507200
+
+If you select does not have any group by function then hadoop never run reducer calls;
+Column Aliases/Nested SELECT Statements
+from (select count(*) as count_1,sum(price) price_1 , 'payment_type' as payment_type from external_sales_with_format_partition) e select e.count_1,e.price_1,e.payment_type ;
+5994 9705000 payment_type
+if you want to pass any comment or virtual column in SQL pass like above
+from (select count(*) as count_1,sum(price) price_1 , 'payment_type' as payment_type from external_sales_with_format_partition) e select e.count_1,e.price_1,e.payment_type 
+where e.count_1 <1;
+use of when
+hive> select country , case when price < 1000 then 'low'
+when price >1000 and price < 2000 then 'ok'
+else 'too high' end as cost 
+from external_sales_with_format_partition;
+United States ok
+France ok
+Sweden too high
+Canada ok
+France ok
+Furthermore, Hive will attempt to run other operations in local mode if the
+hive.exec.mode.local.auto property is set to true: set hive.exec.mode.local.auto=true;
+some time you will get this error
+Cannot run job locally: Number of Input Files (= 6) is larger than hive.exec.mode.local.auto.input.files.max(= 4)
+hive> SELECT name, salary, deductions["Federal Taxes"],
+salary * (1 - deductions["Federal Taxes"])
+FROM employees
+WHERE round(salary * (1 - deductions["Federal Taxes"])) > 70000;
+John Doe 100000.0 0.2 80000.0
+This query is a bit ugly, because the complex expression on the second line is duplicated in the WHERE clause. The following variation eliminates the duplication, using a column alias, but unfortunately it’s not valid:
+hive> SELECT name, salary, deductions["Federal Taxes"],
+salary * (1 - deductions["Federal Taxes"]) as salary_minus_fed_taxes
+FROM employees
+WHERE round(salary_minus_fed_taxes) > 70000;
+FAILED: Error in semantic analysis: Line 4:13 Invalid table alias or column reference 'salary_minus_fed_taxes': (possible column names are:name, salary, subordinates, deductions, address)
+As the error message says, we can’t reference column aliases in the WHERE clause. However,we can use a nested SELECT statement:
+
+hive> SELECT e.* FROM
+> (SELECT name, salary, deductions["Federal Taxes"] as ded,
+> salary * (1 - deductions["Federal Taxes"]) as salary_minus_fed_taxes
+> FROM employees) e
+> WHERE round(e.salary_minus_fed_taxes) > 70000;
+John Doe 100000.0 0.2 80000.0
+Boss Man 200000.0 0.3 140000.0
+Fred Finance 150000.0 0.3 105000.0
+hive> select transaction_date,product,price from external_sales_with_format_partition where product like 'P%' limit 5;
+Transaction_date Product NULL
+1/2/09 6:17 Product1 1200
+1/2/09 4:53 Product1 1200
+1/2/09 13:08 Product1 1200
+1/3/09 14:44 Product1 1200
+A IS NULL
+A IS NOT NULL
+Issues (i.e., FLOAT versus DOUBLE).
+hive> SELECT name, salary, deductions['Federal Taxes'] FROM employees WHERE deductions['Federal Taxes'] > 0.2;
+John Doe 100000.0 0.2
+Mary Smith 80000.0 0.2
+Boss Man 200000.0 0.3
+Fred Finance 150000.0 0.3
+Wait! Why are records with deductions['Federal Taxes'] = 0.2 being returned?
+Here is a modified query that casts the 0.2 literal value to FLOAT. With this change, the expected results are returned by the query:
+hive> SELECT name, salary, deductions['Federal Taxes'] FROM employees WHERE deductions['Federal Taxes'] > cast(0.2 AS FLOAT);
+Boss Man 200000.0 0.3
+Fred Finance 150000.0 0.3
+Note the syntax inside the cast operator: number AS FLOAT.
+SELECT name, address FROM employees WHERE address.street LIKE '%Chicago%' OR address.street LIKE '%Ontario%';
+hive> SELECT name, address.street FROM employees WHERE address.street RLIKE '.*(Chicago|Ontario).*';
+Mary Smith 100 Ontario St.
+Todd Jones 200 Chicago Ave.
+hive> SELECT name, address.street FROM employees WHERE address.street LIKE '%Ave.';
+John Doe 1 Michigan Ave.
+Todd Jones 200 Chicago Ave.
+hive> SELECT name, address.city FROM employees WHERE address.city LIKE 'O%';
+Todd Jones Oak Park
+Bill King Obscuria
+hive> SELECT name, address.street FROM employees WHERE address.street LIKE '%Chi%';
+Todd Jones 200 Chicago Ave.
+Inner Join
+select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on b.product = a.product limit 5;
+if you use limit clause then you will get result like below
+Product Product Payment_Type Name
+Product Product Payment_Type Name
+Product Product Payment_Type Name
+Product Product Payment_Type Name
+Product Product Payment_Type Name
+select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on b.product = a.product;
+Product3 Product3 Mastercard Amanda
+Product3 Product3 Mastercard Amanda
+Product3 Product3 Mastercard Amanda
+hive> select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b limit 5;
+Product Product Payment_Type Name
+Product Product1 Payment_Type carolina
+Product Product1 Payment_Type Betina
+Product Product1 Payment_Type Federica e Andrea
+Product Product1 Payment_Type Gouya
+Product Product2 Payment_Type Gerd W
+Query that will work in Hive
+select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on a.price = b.price limit 5;
+Query that will not work in Hive
+select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on a.price <= b.price limit 5;
+FAILED: Error in semantic analysis: Line 1:146 Both left and right aliases encountered in JOIN 'price'
+This query works
+hive> select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on a.price = b.price and a.price < 3000;
+Product1 Product1 Mastercard Gerald
+Product1 Product1 Mastercard Gerald
+Product1 Product1 Mastercard Gerald
+Product1 Product1 Mastercard Gerald
+
+Hive does not currently support using OR between predicates in ON clauses but where cause you can use .
+hive> select count(*) from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on a.price = b.price or a.price < 3000;
+FAILED: Error in semantic analysis: Line 1:112 OR not supported in JOIN currently '3000'
+This query works 
+hive> select a.product ,b.product,a.payment_type,b.name from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on a.price = b.price and a.price < 3000 where a.product = 'Product1' or a.product = 'Product2';
+this query also works
+hive> select count(*) from external_sales_with_format_partition a join external_sales_2009_with_format_partition b on a.price = b.price and a.price < 3000;
+8487432
+SELECT s.ymd, s.symbol, s.price_close, d.dividend FROM stocks s JOIN dividends d ON s.ymd = d.ymd AND s.symbol = d.symbol WHERE s.symbol = 'AAPL';
+We should switch the positions of stocks and dividends:
+SELECT s.ymd, s.symbol, s.price_close, d.dividend FROM dividends d JOIN stocks s ON s.ymd = d.ymd AND s.symbol = d.symbol WHERE s.symbol = 'AAPL';
+Hive also provides a “hint” mechanism to tell the query optimizer which table should be streamed:
+SELECT /*+ STREAMTABLE(s) */ s.ymd, s.symbol, s.price_close, d.dividend FROM stocks s JOIN dividends d ON s.ymd = d.ymd AND s.symbol = d.symbol WHERE s.symbol = 'AAPL';
+Now Hive will attempt to stream the stocks table, even though it’s not the last table in the query.
+SELECT s.ymd, s.symbol, s.price_close, d.dividend FROM stocks s LEFT OUTER JOIN dividends d ON s.ymd = d.ymd AND s.symbol = d.symbol WHERE s.symbol = 'AAPL';
+hive> SELECT s.ymd, s.symbol, s.price_close, d.dividend FROM stocks s LEFT OUTER JOIN dividends d ON s.ymd = d.ymd AND s.symbol = d.symbol WHERE s.symbol = 'AAPL' AND s.exchange = 'NASDAQ' AND d.exchange = 'NASDAQ';

@@ -1,0 +1,7 @@
+#############################################
+All type of formate and custom programm
+https://pyformat.info/
+https://pyformat.info/
+#############################################
+http://chrisalbon.com/#Python  (fulll Pycode with spark)
+https://databricks.com/blog/2015/07/15/introducing-window-functions-in-spark-sql.html

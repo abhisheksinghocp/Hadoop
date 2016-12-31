@@ -1,0 +1,400 @@
+Python coding skills
+x = sc.textFile ("B:\hadoop_py\work\External_data\Telecom\Telecom_Performance-Monthly_jan_feb_2015.csv")
+In [2]: x.collect()
+Out[2]:
+['Parameter,Unit,Feb-15,Jan-15',
+ 'Total Phones,Lakh,9873.4,9791.19',
+ 'Wireline Phones,Lakh,267.23,268.68',
+ 'Wireless Phones,Lakh,9606.18,9522.52',
+ 'Rural Phones,Lakh,4085.47,4042.42',
+ 'Urban Phones,Lakh,5787.93,5748.77',
+ 'Public Phones,Lakh,1012.82,1039.79',
+ 'Private Phones,Lakh,8860.58,8751.4',
+ 'Wireline %age to Total Phones,%age,2.71,2.74',
+ 'Wireless %age to Total Phones,%age,97.29,97.26',
+ 'Rural %age to Total Phones,%age,41.38,41.29',
+ 'Urban %age to Total Phones,%age,58.62,58.71',
+ 'Public %age to Total Phones,%age,10.26,10.62',
+ 'Private %age to Total Phones,%age,89.74,89.38',
+ 'Overall Teledensity,%age,78.73,78.16',
+ 'Wireline Teledensity,%age,2.13,2.14',
+ 'Wireless Teledensity,%age,76.6,76.01',
+ 'Rural Teledensity,%age,47.21,46.74',
+ 'Urban Teledensity,%age,148.96,148.19',
+ 'Public  Teledensity,%age,8.08,8.3',
+ 'Private  Teledensity,%age,70.66,69.86',
+ 'Broadband,Lakh,973.7,944.9']
+ 
+ To display the content of Spark RDD’s there in an organized format, actions like   “first ()”,”take ()”, and “takeSample (False, 10, 2)” can be used.
+ 
+ In [5]: x.take(3)
+Out[5]:
+['Parameter,Unit,Feb-15,Jan-15',
+ 'Total Phones,Lakh,9873.4,9791.19',
+ 'Wireline Phones,Lakh,267.23,268.68']
+#########################################################################################################################################################
+ In [24]: lines = sc.textFile("B:\hadoop_py\work\External_data\Telecom\Telecom_Performance-Monthly_jan_feb_2015.csv")
+
+In [25]: pythonlines = lines.filter(lambda line: "Lakh" in line)
+
+In [26]: pythonlines.first()
+Out[26]: 'Total Phones,Lakh,9873.4,9791.19'
+
+#########################################################################################################################################################
+
+In [30]: pythonlines.collect()
+Out[30]:
+['Total Phones,Lakh,9873.4,9791.19',
+ 'Wireline Phones,Lakh,267.23,268.68',
+ 'Wireless Phones,Lakh,9606.18,9522.52',
+ 'Rural Phones,Lakh,4085.47,4042.42',
+ 'Urban Phones,Lakh,5787.93,5748.77',
+ 'Public Phones,Lakh,1012.82,1039.79',
+ 'Private Phones,Lakh,8860.58,8751.4',
+ 'Broadband,Lakh,973.7,944.9']
+ 
+#########################################################################################################################################################
+ 
+ In [31]: pythonlines.take(3)
+Out[31]:
+['Total Phones,Lakh,9873.4,9791.19',
+ 'Wireline Phones,Lakh,267.23,268.68',
+ 'Wireless Phones,Lakh,9606.18,9522.52']
+ 
+ In [32]: pythonlines.take(-1)
+Out[32]: []
+
+In [33]: pythonlines.take(-3)
+Out[33]: []
+
+#########################################################################################################################################################
+
+In [34]: pythonlines = lines.filter(lambda abhishek: "Lakh" in abhishek)
+
+In [35]: pythonlines.take(-3)
+Out[35]: []
+
+In [36]: pythonlines.take(3)
+Out[36]:
+['Total Phones,Lakh,9873.4,9791.19',
+ 'Wireline Phones,Lakh,267.23,268.68',
+ 'Wireless Phones,Lakh,9606.18,9522.52']
+ 
+Similler work 
+
+In [38]: def hasPython(line): return "Python" in line
+In [39]: pythonLines = lines.filter(hasPython)
+In [41]: pythonlines.take(3)
+Out[41]:
+['Total Phones,Lakh,9873.4,9791.19',
+ 'Wireline Phones,Lakh,267.23,268.68',
+ 'Wireless Phones,Lakh,9606.18,9522.52'] 
+#########################################################################################################################################################
+
+Example 2-6. Running a Python script
+bin/spark-submit my_script.py
+(Note that you will have to use backslashes instead of forward slashes on Windows.)
+
+#########################################################################################################################################################
+
+Example 2-7. Initializing Spark in Python
+from pyspark import SparkConf, SparkContext
+conf = SparkConf().setMaster("local").setAppName("My App")
+sc = SparkContext(conf = conf)
+
+B:\hadoop_py\spark-2.0.2-bin-hadoop2.7\python\pyspark\context.py in __init__(self, master, appName, sparkHome, pyFiles, environment, batchSize, serializer, conf, gateway, jsc, profiler_cls)
+
+Finally, to shut down Spark, you can either call the stop() method on your Spark‐
+Context, or simply exit the application (e.g., with System.exit(0) or sys.exit()).
+
+#########################################################################################################################################################
+
+resilient
+distributed dataset (RDD). An RDD is simply a distributed collection of elements. In Spark all work is expressed as either creating new RDDs, transforming existing RDDs, or calling operations on RDDs to compute a result. Under the hood, Spark automatically distributes the data contained
+
+An RDD in Spark is simply an immutable distributed collection of objects. Each RDD is split into multiple partitions, which may be computed on different nodes of the cluster. RDDs can contain any type of Python, Java, or Scala objects, including userdefined classes. Users create RDDs in two ways: by loading an external dataset, or by distributing a collection of objects (e.g., a list or set) in their driver program.
+
+RDDs offer two types of operations: transformations and actions. 
+Transformations 		construct a new RDD from a previous one. For example, one common transformation is filtering data that matches a predicate. In our text file example, we can use this to create a new RDD holding just the strings that contain the word Python,
+
+Actions			 on the other hand, compute a result based on an RDD, and either return it to the driver program or save it to an external storage system (e.g., HDFS).
+
+
+Transformations and actions are different because of the way Spark computes RDDs.
+Although you can define new RDDs any time, Spark computes them only in a lazy fashion—that is, the first time they are used in an action. This approach might seem unusual at first, but makes a lot of sense when you are working with Big Data. For
+instance, consider Example 3-2 and Example 3-3, where we defined a text file and then filtered the lines that include Python. If Spark were to load and store all the lines in the file as soon as we wrote lines = sc.textFile(...), it would waste a lot of storage space, given that we then immediately filter out many lines. Instead, once Spark sees the whole chain of transformations, it can compute just the data needed for its result. In fact, for the first() action, Spark scans the file only until it finds the first matching line; it doesn’t even read the whole file.
+Finally, Spark’s RDDs are by default recomputed each time you run an action on them. If you would like to reuse an RDD in multiple actions, you can ask Spark to
+persist it using RDD.persist(). We can ask Spark to persist our data in a number of different places, which will be covered in Table 3-6. After computing it the first time, Spark will store the RDD contents in memory (partitioned across the machines in your cluster), and reuse them in future actions. Persisting RDDs on disk instead of memory is also possible. The behavior of not persisting by default may again seem unusual, but it makes a lot of sense for big datasets: if you will not reuse the RDD,
+1 The ability to always recompute an RDD is actually why RDDs are called “resilient.” When a machine holding RDD data fails, Spark uses this ability to recompute the missing partitions, transparent to the user.there’s no reason to waste storage space when Spark could instead stream through the
+data once and just compute the result.1 In practice, you will often use persist() to load a subset of your data into memory and query it repeatedly. For example, if we knew that we wanted to compute multiple results about the README lines that contain Python, we could write the script shown in Example 3-4.
+Example 3-4. Persisting an RDD in memory 
+>>> pythonLines.persist
+>>> pythonLines.count()
+2
+>>> pythonLines.first()
+u'## Interactive Python Shell'
+To summarize, every Spark program and shell session will work as follows:
+1. Create some input RDDs from external data.
+2. Transform them to define new RDDs using transformations like filter().
+3. Ask Spark to persist() any intermediate RDDs that will need to be reused.
+4. Launch actions such as count() and first() to kick off a parallel computation,
+which is then optimized and executed by Spark
+
+#########################################################################################################################################################
+
+>> lines = sc.parallelize(["pandas", "i like pandas"])
+>>> lines.count()
+2
+
+>>> lines.collect()
+["pandas", "i like pandas"]
+
+>>> lines.first()
+'pandas'
+
+#########################################################################################################################################################
+
+RDDs support two types of operations: transformations and actions (both are lazy). 
+Transformations are operations on RDDs that return a new RDD, such as map() and filter(). Actions are operations that return a result to the driver program
+or write it to storage, and kick off a computation, such as count() and first().
+
+you are ever confused
+
+whether a given function is a transformation or an action, you can look at its return type: transformations return RDDs, whereas actions return some other data type.
+
+NOTE :- transformed RDDs are computed lazily, only when you use them in an action.
+
+Spark keeps track of the set of dependencies between different RDDs, called the lineage graph.
+
+below oprations are call transformation
+
+>>> laks=lines.filter(lambda x: "laks" in x)
+>>> laks=lines.filter(lambda x: "%age" in x)
+>>> laks=lines.filter(lambda x: "Lakh" in x)
+>>> laks=lines.filter(lambda x: "%age" in x)
+>>> laks=lines.filter(lambda x: "Lakh" in x)
+>>> age=lines.filter(lambda x: "%age" in x)
+>>> 
+>>> 
+>>> final = laks.union(age)
+16/12/17 17:44:20 INFO FileInputFormat: Total input paths to process : 1
+
+print "Input had " + final.count() + " concerning lines"
+number of records
+
+print "Here are 10 examples:"
+for line in final.take(10):
+print line
+
+total Phones,Lakh,9873.4,9791.19
+Wireline Phones,Lakh,267.23,268.68
+Wireless Phones,Lakh,9606.18,9522.52
+Rural Phones,Lakh,4085.47,4042.42
+Urban Phones,Lakh,5787.93,5748.77
+Public Phones,Lakh,1012.82,1039.79
+Private Phones,Lakh,8860.58,8751.4
+Broadband,Lakh,973.7,944.9
+Wireline %age to Total Phones,%age,2.71,2.74
+Wireless %age to Total Phones,%age,97.29,97.26
+
+RDDs also have a collect() function to retrieve the entire RDD. This can be useful if your program filters RDDs down to a very small size and you’d like to
+deal with it locally. Keep in mind that your entire dataset must fit in memory on a single machine to use collect() on it, so collect() shouldn’t be used on large datasets.
+
+note :- As you read earlier, transformations on RDDs are lazily evaluated, meaning that Spark will not begin to execute until it sees an action.
+
+Lazy evaluation means that when we call a transformation on an RDD (for instance,calling map()), the operation is not immediately performed. Instead, Spark internally records metadata to indicate that this operation has been requested. Rather than thinking of an RDD as containing specific data, it is best to think of each RDD as consisting of instructions on how to compute the data that we build up through transformations. Loading data into an RDD is lazily evaluated in the same way transformations are. So, when we call sc.textFile(), the data is not loaded until it is necessary.As with transformations, the operation (in this case, reading the data) can occur multiple times.
+
+In Spark, there is no substantial benefit to writing a single complex map instead of chaining together many simple operations.Thus, users are free to organize their program into smaller, more manageable operations.
+
+#########################################################################################################################################################
+
+In Python, we have three options for passing functions into Spark
+
+Example 3-18. Passing functions in Python
+word = rdd.filter(lambda s: "error" in s)
+def containsError(s):
+return "error" in s
+word = rdd.filter(containsError)
+
+nums = sc.parallelize([1, 2, 3, 4])
+squared = nums.map(lambda x: x * x).collect()
+for num in squared: print "%i " % (num)
+
+1 
+4 
+9 
+16 
+
+>>> for num in squared: print (num)
+1
+4
+9
+16
+
+>> nums.first()
+1
+>>> nums.take(2)
+[1,2]
+>>> nums.collect()
+[1,2,3,4]
+
+#########################################################################################################################################################
+
+lines = sc.parallelize(["hello world", "hi"])
+words = lines.flatMap(lambda line: line.split(" "))
+words.first() # returns "hello"
+
+#########################################################################################################################################################
+
+reduce(), which takes a function that operates on two elements of the type in your RDD and returns a new element of the same type.
+Similar to reduce() is fold(), which also takes a function with the same signature as needed for reduce(), but in addition takes a “zero value” to be used for the initial call on each partition. The zero value you provide should be the identity element for your operation; that is, applying it multiple times with your function should not change the value (e.g., 0 for +, 1 for *, or an empty list for concatenation).
+
+sum = rdd.reduce(lambda x, y: x + y)
+
+Note :- For example, 
+when computing a running average, we need to keep track of both the count so far and the number of elements, which requires us to return a pair. We could work around this by first using map() where we transform every element into the element and the number 1, which is the type we want to return, so that the reduce() function can work on pairs.
+
+
+sumCount = nums.aggregate((0, 0),
+(lambda acc, value: (acc[0] + value, acc[1] + 1),
+(lambda acc1, acc2: (acc1[0] + acc2[0], acc1[1] + acc2[1]))))
+return sumCount[0] / float(sumCount[1])
+
+#########################################################################################################################################################
+
+Persistence levels from org.apache.spark.storage.StorageLevel and
+pyspark.StorageLevel; if desired we can replicate the data on two machines by adding _2 to
+the end of the storage level
+
+Level 				Space used CPU time In memory On disk 	Comments
+MEMORY_ONLY 			High 	Low 		Y 		N
+MEMORY_ONLY_SER 		Low 	High 		Y 		N
+MEMORY_AND_DISK 		High 	Medium 		Some 	Some 	Spills to disk if there is too much data to fit in memory.
+MEMORY_AND_DISK_SER 	Low 	High 		Some 	Some 	Spills to disk if there is too much data to fit in memory. 
+															Stores serialized representation in memory.
+DISK_ONLY 				Low 	High 		N 		Y
+
+
+Note := Off-heap caching is experimental and uses Tachyon. If you are interested in off-heap caching with Spark, take a look at the Running Spark on Tachyon guide.
+
+NOte :- if you attempt to cache too much data to fit in memory, Spark will automatically evict old partitions using a Least Recently Used (LRU) cache policy
+
+RDDs come with a method called unpersist() that lets you manually remove them from the cache.
+
+#########################################################################################################################################################
+
+Example 9-5. Python SQL imports
+# Import Spark SQL
+from pyspark.sql import HiveContext, Row
+# Or if you can't include the hive requirements
+from pyspark.sql import SQLContext, Row
+
+Example 9-8. Constructing a SQL/Hive context in Python
+hiveCtx = HiveContext(sc)
+
+Example 9-11. Loading and quering tweets in Python
+
+input = hiveCtx.jsonFile(inputFile)
+# Register the input schema RDD
+input.registerTempTable("tweets")
+# Select tweets based on the retweetCount
+topTweets = hiveCtx.sql("""SELECT text, retweetCount FROM tweets ORDER BY retweetCount LIMIT 10""")
+
+Example 9-14. Accessing the text column in the topTweets SchemaRDD in Python
+topTweetText = topTweets.map(lambda row: row.text)
+
+Note :- If you have an existing Hive installation, and have copied your hive-site.xml file to $SPARK_HOME/conf, you can also just run hiveCtx.sql to query your existing Hive tables.
+
+#########################################################################################################################################################
+
+Both loading data and executing queries return SchemaRDDs. SchemaRDDs are similar to tables in a traditional database. Under the hood, a SchemaRDD is an RDD composed of Row objects with additional schema information of the types in each column. Row objects are just wrappers around arrays of basic types (e.g., integers and strings), and we’ll cover them in more detail in the next section.One important note: in future versions of Spark, the name SchemaRDD may be changed to DataFrame. This renaming was still under discussion as this book went to
+print.
+
+SchemaRDDs are also regular RDDs, so you can operate on them using existing RDD transformations like map() and filter(). However, they provide several additional capabilities. Most importantly, you can register any SchemaRDD as a temporary table
+
+to query it via HiveContext.sql or SQLContext.sql. You do so using the SchemaRDD’s registerTempTable() method
+
+
+we should use
+the special hiveCtx.cacheTable("tableName") method. When caching a table Spark SQL represents the data in an in-memory columnar format. This cached table will remain in memory only for the life of our driver program
+
+You can also cache tables using HiveQL/SQL statements. To cache or uncache a table simply run CACHE TABLE tableName or UNCACHE TABLE tableName. This is most
+commonly used with command-line clients to the JDBC server. 
+
+#################
+HIVE
+#################
+
+To connect Spark SQL to an existing Hive installation, you need to provide a Hive configuration. You do so by copying your hive-site.xml file to Spark’s ./conf/ directory. If you just want to explore, a local Hive metastore will be used if no hive-site.xml is set, and we can easily load data into a Hive table to query later on.
+
+Example 9-15. Hive load in Python
+from pyspark.sql import HiveContext
+hiveCtx = HiveContext(sc)
+rows = hiveCtx.sql("SELECT key, value FROM mytable")
+keys = rows.map(lambda row: row[0])
+
+Parquet
+#########
+Parquet is a popular column-oriented storage format that can store records with nested fields efficiently. It is often used with tools in the Hadoop ecosystem, and it supports all of the data types in Spark SQL. Spark SQL provides methods for reading data directly to and from Parquet files.
+
+First, to load data, you can use HiveContext.parquetFile or SQLContext.parquet File,
+
+Parquet Parquet is a popular column-oriented storage format that can store records with nested fields efficiently. It is often used with tools in the Hadoop ecosystem, and it supports all of the data types in Spark SQL. Spark SQL provides methods for reading data directly to and from Parquet files.
+
+First, to load data, you can use HiveContext.parquetFile or SQLContext.parquet 
+File, as shown in Example 9-18.
+Example 9-18. Parquet load in Python
+# Load some data in from a Parquet file with field's name and favouriteAnimal
+rows = hiveCtx.parquetFile(parquetFile)
+names = rows.map(lambda row: row.name)
+print "Everyone"
+print names.collect()
+
+You can also register a Parquet file as a Spark SQL temp table and write queries against it. Example 9-19 continues from Example 9-18 where we loaded the data.
+Example 9-19. Parquet query in Python
+
+# Find the panda lovers
+tbl = rows.registerTempTable("people")
+pandaFriends = hiveCtx.sql("SELECT name FROM people WHERE favouriteAnimal = \"panda\"")
+print "Panda friends"
+print pandaFriends.map(lambda row: row.name).collect()
+Finally, you can save the contents of a SchemaRDD to Parquet with saveAsParquet
+File(), as
+
+Example 9-20. Parquet file save in Python
+pandaFriends.saveAsParquetFile("hdfs://...")
+
+JSON
+########
+
+To load our JSON data, all we need to do is call the jsonFile() function on our hiveCtx,
+you can call printSchema on the resulting SchemaRDD
+
+Example 9-21. Input records
+{"name": "Holden"}
+{"name":"Sparky The Bear", "lovesPandas":true, "knows":{"friends": ["holden"]}}
+Example 9-22. Loading JSON with Spark SQL in Python
+input = hiveCtx.jsonFile(inputFile)
+
+Temp table
+##############
+
+Example 9-28. Creating a SchemaRDD using Row and named tuple in Python
+happyPeopleRDD = sc.parallelize([Row(name="holden", favouriteBeverage="coffee")])
+happyPeopleSchemaRDD = hiveCtx.inferSchema(happyPeopleRDD)
+happyPeopleSchemaRDD.registerTempTable("happy_people")
+
+Python we import the DataType.
+###############################
+
+# Make a UDF to tell us how long some text is
+hiveCtx.registerFunction("strLenPython", lambda x: len(x), IntegerType())
+lengthSchemaRDD = hiveCtx.sql("SELECT strLenPython('text') FROM tweets LIMIT 10")
+
+Note :- When caching data, Spark SQL uses an in-memory columnar storage. This not only takes up less space when cached, but if our subsequent queries depend only on subsets of the data, Spark SQL minimizes the data read.
+
+###################
+Highly important
+###################
+
+Spark Streaming is available only in Java and Scala. Experimental Python support was added in Spark 1.2, though it supports only text data.

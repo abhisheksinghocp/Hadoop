@@ -1,0 +1,48 @@
+Important classes of Spark SQL and DataFrames:
+	pyspark.sql.SQLContext Main entry point for DataFrame and SQL functionality.
+	pyspark.sql.DataFrame A distributed collection of data grouped into named columns.
+	pyspark.sql.Column A column expression in a DataFrame.
+	pyspark.sql.Row A row of data in a DataFrame.
+	pyspark.sql.HiveContext Main entry point for accessing data stored in Apache Hive.
+	pyspark.sql.GroupedData Aggregation methods, returned by DataFrame.groupBy().
+	pyspark.sql.DataFrameNaFunctions Methods for handling missing data (null values).
+	pyspark.sql.DataFrameStatFunctions Methods for statistics functionality.
+	pyspark.sql.functions List of built-in functions available for DataFrame.
+	pyspark.sql.types List of data types available.
+	pyspark.sql.Window For working with window functions.
+	class pyspark.sql.SparkSession(sparkContext, jsparkSession=None)
+	The entry point to programming Spark with the Dataset and DataFrame API.
+
+###########################
+The Contexts/Environments #
+###########################
+
+Apache Spark has had two core contexts that are available to the user. 
+	The sparkContext made available as sc and 
+	the SQLContext made available as sqlContext, 
+	these contexts make a variety of functions and information available to the user. 
+	The sqlContext makes a lot of DataFrame functionality available 
+	while the sparkContext focuses more on the Apache Spark engine itself.
+
+However in Apache Spark 2.X, there is just one context - the SparkSession.
+For Spark 1.X the variables are sqlContext and sc.
+
+##################
+Data Interfaces  #
+##################
+
+There are several key interfaces that you should understand when you go to use Spark.
+
+The RDD (Resilient Distributed Dataset)
+##################
+	Apache Spark's first abstraction was the RDD or Resilient Distributed Dataset. Essentially it is an interface to a sequence of data objects that consist of one or more types that are located across a variety of machines in a cluster. RDD's can be created in a variety of ways and are the "lowest level" API available to the user. While this is the original data structure made available, new users should focus on Datasets as those will be supersets of the current RDD functionality.
+
+The DataFrame
+##################
+	The DataFrame is collection of distributed Row types. These provide a flexible interface and are similar in concept to the DataFrames you may be familiar with in python (pandas) as well as in the R language.
+	
+The Dataset
+##################
+	The Dataset is Apache Spark newest distributed collection and can be considered a combination of DataFrames and RDDs. 
+    It provides the typed interface that is available in RDDs while providing a lot of conveniences of DataFrames. It will be the core abstraction going forward.
+	

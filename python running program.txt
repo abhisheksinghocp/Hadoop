@@ -1,0 +1,205 @@
+###############################################
+>>> raw_input
+<built-in function raw_input>
+>>> raw_input()
+ABhishek
+'ABhishek'
+>>> raw_input("\n\tPress the enter key to exit.")
+
+	Press the enter key to exit.Abhishek
+'Abhishek'
+###############################################
+>>> import sys; x = 'foo'; sys.stdout.write(x + '\n')
+foo
+>>> import sys; x = 'foo'; sys.stdout.write(x + '\t')
+foo	>>> 
+###############################################
+if expression :
+suite
+elif expression :
+suite
+else :
+suite
+###############################################
+Python provides a getopt module that helps you parse command-line options and arguments.
+
+user@chrysaor-info-ubuntu-14041-desktop-amd64:~$ cat test_arg.py 
+#!/usr/bin/python
+import sys
+print 'Number of arguments:', len(sys.argv), 'arguments.'
+print 'Argument List:', str(sys.argv)
+
+user@chrysaor-info-ubuntu-14041-desktop-amd64:~$ ./test_arg.py abhishek singh dimpal singh
+Number of arguments: 5 arguments.
+Argument List: ['./test_arg.py', 'abhishek', 'singh', 'dimpal', 'singh']
+user@chrysaor-info-ubuntu-14041-desktop-amd64:~$ 
+###############################################
+
+user@chrysaor-info-ubuntu-14041-desktop-amd64:~$ cat test_arg.py
+#!/usr/bin/python
+import sys
+print 'Number of arguments:', len(sys.argv), 'arguments.'
+print 'Argument List:', str(sys.argv[0])  ## always as script name like shell script
+print 'Argument List:', str(sys.argv[1])
+print 'Argument List:', str(sys.argv[2])
+print 'Argument List:', str(sys.argv[3])
+print 'Argument List:', str(sys.argv[4])
+
+user@chrysaor-info-ubuntu-14041-desktop-amd64:~$ ./test_arg.py abhishek singh dimpal singh
+Number of arguments: 5 arguments.
+Argument List: ['./test_arg.py', 'abhishek', 'singh', 'dimpal', 'singh']
+Argument List: abhishek
+Argument List: singh
+Argument List: dimpal
+Argument List: singh
+
+###############################################
+
+Consider we want to pass two file names through command line and we also want to give an option to check the usage of the script. Usage of the script is as follows:
+usage: test.py -i <inputfile> -o <outputfile>
+
+Here is the following script to test.py:
+
+#!/usr/bin/python
+import sys, getopt
+def main(argv):
+inputfile = ''
+outputfile = ''
+try:
+opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+except getopt.GetoptError:
+print 'test.py -i <inputfile> -o <outputfile>'
+sys.exit(2)
+for opt, arg in opts:
+if opt == '-h':
+print 'test.py -i <inputfile> -o <outputfile>'
+sys.exit()
+elif opt in ("-i", "--ifile"):
+inputfile = arg
+elif opt in ("-o", "--ofile"):
+outputfile = arg
+print 'Input file is "', inputfile
+print 'Output file is "', outputfile
+
+#Starting an identifier with a single leading underscore indicates that the identifier is private.
+#Starting an identifier with two leading underscores indicates a strongly private identifier.
+#If the identifier also ends with two trailing underscores, the identifier is a language-defined special name.
+#All the Python keywords contain lowercase letters only.
+
+if __name__ == "__main__":
+main(sys.argv[1:])
+
+#####################################################
+and del"   "from"   "None"   "try"  "as"   "elif"   "global"   "nonlocal"   "True"  "assert"   "else"   "if"   "not"   "while"  "break"   "except"   "import"   "or"   "with"  "class"   "False"   "in"   "pass"   "yield"  "continue"   "finally"   "is"   "raise"  "def"   "for"   "lambda"   "return
+
+#####################################################
+
+Here are some examples of valid and invalid identifiers:
+• All of the following words are valid identifiers and so can be used as variable names: x, x2, total,port_22, and FLAG.
+• None of the following words are valid identifiers: sub-total (dash is not a legal symbol in an identifier), first entry (space is not a legal symbol in an identifier), 4all (begins with a digit), #2 (pound sign is not a legal symbol in an identifier), and class (class is a reserved word).
+
+######################################################	
+
+Python provides the class reserved word to allow the creation of new types of objects. We can create a new type, Point, as follows:
+class Point:
+def __init__(self, x, y):
+self.x = x
+self.y = y
+
+This code defines a new type. This Point class contains a single method named __init__. This special method is known as a constructor, or initializer.
+The constructor code executes when the client creates an object. The first parameter of this constructor, named self, is a reference to the object being created. The statement
+self.x = x
+
+within the constructor establishes a field named x in the newly created Point object. The expression self.x refers to the x field in the object, and the x variable on the right side of the assignment operator refers to the parameter named x. These two x names represent different variables. Once this new type has been defined in such a class definition, a client may create and use variables of the type Point:
+# Client code
+pt = Point(2.5, 6) # Make a new Point object
+print("(", pt.x, ",", pt.y, ")", sep="")
+
+
+##########################################################
+
+Consider a simple employee record that consists of a name (string), an identification number (integer)
+and a pay rate (floating-point number). Such a record can be represented by the class
+class EmployeeRecord:
+	def __init__(n, i, r):
+		name = n
+		id = i
+		pay_rate = r
+
+Such an object could be created and used as
+rec = EmployeeRecord("Mary", 2148, 10.50)
+Listing 12.1 (employee.py) uses our EmployeeRecord class to implement a simple database of employee records.
+
+Listing 12.1: employee.py
+1 # Information about one employee
+2 class EmployeeRecord:
+	 def __init__(self, n, i, r):
+		 self.name = n
+		 self.id = i
+		 self.pay_rate = r
+
+def open_database(filename, db):
+
+10 """
+11 Read employee information from a given file and store it
+12 in the given vector.
+13 Returns true if the file could be read; otherwise,
+14 it returns false.
+15 """
+16 # Open file to read
+	 lines = open(filename)
+	 for line in lines:
+		 name, id, rate = eval(line)
+		 db.append(EmployeeRecord(name, id, rate))
+		 lines.close()
+	 return True
+
+##########################################################################################
+Suppose, for example, you wish to represent a mathematical rational number, or fraction. A rational number is the ratio of two integers. There is a restriction, however—the number on the bottom of a fraction
+
+cannot be zero. The number on the top of the fraction is called the numerator, and the bottom number is known as the denominator. A simple class such as
+
+class RationalNum:
+	def __init__(self, num, den):
+		self.numerator, self.denominator = num, den
+There is nothing in this class definition that prevents a client from making a rational number like the following:
+	fract = RationalNum(1, 0)
+	
+In this case the variable fract represents an undefined integer. We can help matters with a different constructor:
+
+class RationalNum:
+	def __init__(self, num, den):
+		self.numerator = num
+		if den != 0:
+			self.denominator = den
+		else:
+			print("Attempt to make an illegal rational number")
+			from sys import exit
+			exit(1) # Terminate program with an error code
+			
+While this new constructor will prevent illegal initialization, clients still can subvert our RationalNum objects:
+	fract = RationalNum(1, 2) # This is OK
+	fract.denominator = 0 # This is bad!
+
+################################################################################################
+List
+######
+A list need not be homogeneous; that is, the elements of a list do not all have to be of the same type.
+
+Like any other variable, a list variable can be local or global, and it must be defined (assigned) before it is used. The following code fragment declares a list named lst that holds the integer values 2,−3,0,4,−1:
+lst = [2, -3, 0, 4, -1]
+
+lst = [2, -3, 0, 4, -1] # Assign the list
+lst[0] = 5 # Make the first element 5
+print(lst[1]) # Print the second element
+lst[4] = 12 # Make the last element 12
+print(lst) # Print a list variable
+print([10, 20, 30][1]) # Print second element of literal list
+
+################################################################################################
+>>> '\u011f'
+'ğ'
+>>> ord('ğ')
+287
+>>> chr(287)
+'ğ'

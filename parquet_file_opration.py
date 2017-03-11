@@ -19,4 +19,5 @@ parq.select('*').show()
 # parq.write.parquet(path="B:\hadoop_py\work\est")
 #                           or
 # you can use this command to save output and from next run it will overwrite same location with new output"
-parq.write.format('csv').mode('overwrite').save("B:\hadoop_py\work\parq_to_txt")
+# parq.write.format('csv').mode('overwrite').save("B:\hadoop_py\work\parq_to_txt")
+parq.write.format('parquet').mode('overwrite').save("B:\hadoop_py\work\parq_to_parq")
